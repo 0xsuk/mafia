@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void print_bytecode(compiler* c) {
+void print_bytecode(compiler* c) {
   printf("bytecodes:\n");
   for (int i = 0; i<c->codes.size(); i++) {
     printf("%d\n", c->codes[i]);
@@ -91,8 +91,8 @@ static void call(compiler* c, scanner* s) {
 }
 
 static void print(compiler* c, scanner* s) {
-  emit_byte(c, s, OP_PRINT);
   expression(c, s);
+  emit_byte(c, s, OP_PRINT);
 }
 
 static void number(compiler* c, scanner* s) {

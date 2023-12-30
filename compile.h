@@ -1,9 +1,32 @@
-#ifndef PARSE_H
-#define PARSE_H
+#ifndef COMPILE_H
+#define COMPILE_H
 
 #include "scan.h"
+#include <stdint.h>
 #include <vector>
-#include "vm.h"
+
+enum op_code {
+  OP_CONSTANT,
+  OP_NIL,
+  OP_TRUE,
+  OP_CALL,
+  OP_PRINT,
+};
+
+enum value_type {
+  VAL_BOOL,
+  VAL_NIL,
+  VAL_NUMBER,
+  VAL_OBJ,
+};
+
+struct value {
+  value_type type;
+  union {
+    bool boolean;
+    double number;
+  };
+};
 
 struct compile_error {
   int line;
@@ -23,7 +46,7 @@ struct compiler {
 
 #define NUMBER_VAL(v) ((value){VAL_NUMBER, {.number = v}})
 
-
+void print_bytecode(compiler* c);
 static void expression(compiler* c, scanner* s);
 void compile(compiler* c, char* code);
 #endif
