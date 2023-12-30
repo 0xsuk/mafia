@@ -4,8 +4,15 @@
 #include "compile.h"
 
 bool is_complete(char* code) {
-  if (compile(code) == 1) {
-    return false;
+  compiler c;
+  compile(&c, code);
+  
+  if (c.had_error) {
+    printf("error:\n");
+    for (int i = 0; i<c.errors.size(); i++) {
+      printf("%s\n", c.errors[i].message);
+    }
+    return true;
   }
   
   return true;

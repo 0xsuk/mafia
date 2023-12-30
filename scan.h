@@ -13,14 +13,9 @@ enum token_type {
   TOKEN_IF,
   TOKEN_DEFUN,
   TOKEN_DEFMACRO,
-  TOKEN_LET
-};
-
-struct token {
-  token_type type;
-  char* start;
-  int len;
-  int line;
+  TOKEN_LET,
+  TOKEN_EOF,
+  TOKEN_ERR
 };
 
 struct scanner {
@@ -30,7 +25,17 @@ struct scanner {
   scanner(char*);
 };
 
-token scan_token(scanner* s);
-int scan(char* code);
+struct token {
+  token_type type;
+  char* start;
+  int len;
+  int line;
+  token() = default;
+  token(scanner*, token_type);
+};
+
+void print_token(token*);
+token scan_token(scanner*);
+int scan(char*);
 
 #endif
