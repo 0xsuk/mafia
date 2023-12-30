@@ -43,13 +43,42 @@ static bool match(compiler* c, scanner* s, token_type type) {
   return true;
 }
 
-static void paren(compiler* c, scanner* s) {
-  printf("c->current:%d\n", c->current.type);
-  if (!match(c, s, TOKEN_LEFT_PAREN)) {
-    mark_error(c, "unexpected token: left_paren expected");
+static void consume(compiler* c, scanner* s, token_type type, char* message) {
+  if (!match(c, s, type)) {
+    mark_error(c, message);
+  }
+}
+
+static void args(compiler* c, scanner* s) {
+  while (!match(c, s, TOKEN_RIGHT_PAREN)) {
+    expression(c, s);
+  }
+}
+
+static void call(compiler* c, scanner* s) {
+  expression(c, s);
+}
+
+static void expression(compiler* c, scanner* s) {
+  if (match(c, s, TOKEN_LEFT_PAREN)) {
+    call(c, s);
+    args(c, s);
     return;
   }
-  advance(c, s);
+  
+  if (match(c, s, TOKEN_NUMBER)) {
+    return;
+  }
+
+  if (match(c, s, TOKEN_STRING)) {
+    return;
+  }
+
+  if (match(c, s, TOKEN_IDENTIFIER)) {
+    return;
+  }
+
+  mark_error(c, "unexpected expression");
 }
 
 void compile(compiler* c, char* code) {
@@ -57,7 +86,7 @@ void compile(compiler* c, char* code) {
   
   advance(c, &s);
 
-  if (!match(c, &s, TOKEN_EOF)) {
-    paren(c, &s);
+  while (!match(c, &s, TOKEN_EOF)) {
+    expression(c, &s);
   }
 }

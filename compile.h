@@ -15,6 +15,6 @@ struct compiler {
   bool panic_mode = false;
   std::vector<compile_error> errors;
 };
-
+static void expression(compiler* c, scanner* s);
 void compile(compiler* c, char* code);
 #endif
