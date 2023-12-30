@@ -91,12 +91,30 @@ static bool is_alpha(char c) {
 
 static bool is_digit(char c) { return '0' <= c && c <= '9'; }
 
+static token_type check_keyword(scanner* s, int start, char* rest, token_type type) {
+  if (strncmp(&s->start[start], rest, strlen(rest)) == 0) {
+    return type;
+  }
+
+  return TOKEN_IDENTIFIER;
+}
+
+static token_type identifier_type(scanner* s) {
+  switch (*s->start) {
+  case 'p':
+    return check_keyword(s, 1, "rint", TOKEN_PRINT);
+    
+  }
+
+  return TOKEN_IDENTIFIER;
+}
+
 static token identifier(scanner* s, char c)  {
   while (is_alpha(peek(s)) || is_digit(peek(s))) {
     advance(s);
   }
 
-  return token{s, TOKEN_IDENTIFIER};
+  return token{s, identifier_type(s)};
 }
 
 static token number(scanner* s, char c) {

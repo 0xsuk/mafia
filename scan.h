@@ -2,6 +2,7 @@
 #define SCAN_H
 
 enum token_type {
+  TOKEN_PRINT,
   TOKEN_LEFT_PAREN,
   TOKEN_RIGHT_PAREN,
   TOKEN_BANG,
